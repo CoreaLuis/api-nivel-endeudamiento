@@ -2,7 +2,10 @@
     "name": "api-calculo-ebook",
     "version": "1.0.0",
     "description": "API para cálculos relacionados con ebooks, desarrollada con Express.",
-    "main": "app.js",
+    "main": "index.js",
+    "engines": {
+        "node": "14.x"
+    },
     "scripts": {
         "start": "node app.js",
         "dev": "nodemon app.js",
