@@ -49,6 +49,7 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
 
     const totalGastos = basicos + prestamo + combustible + seguro + mantenimiento;
     const porcentajeGastos = (totalGastos / ingresos) * 100;
+    const margenDisponible = ingresos - totalGastos;
     // Verificar si está entre el 20% y el 30%
     const entreVeinteYTreintaPorCiento = porcentajeGastos >= 20 && porcentajeGastos <= 30;
     const thirthyPercent = (ingresos - totalGastos) * 0.3
@@ -57,6 +58,7 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
     return res.json({
         ingresosMensuales: ingresos,
         totalGastos,
+        margenDisponible,
         porcentajeGastos: porcentajeGastos.toFixed(2), // Redondear a 2 decimales
         entreVeinteYTreintaPorCiento,
         thirthyPercent,
