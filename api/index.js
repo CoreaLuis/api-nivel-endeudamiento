@@ -4,14 +4,13 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-// Middleware para manejar JSON
-app.use(express.json());
-
 // Ruta principal
 app.get('/', (req, res) => {
     res.send('¡Bienvenido a la API calculo de endeudamiento!');
 });
 
+// Middleware para manejar JSON
+app.use(express.json());
 
 // Ruta para calcular los gastos y margen disponible
 app.post('/api/calcular-endeudamiento', (req, res) => {
