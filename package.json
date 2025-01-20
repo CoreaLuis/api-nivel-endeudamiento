@@ -4,7 +4,7 @@
     "description": "API para cálculos relacionados con ebooks, desarrollada con Express.",
     "main": "index.js",
     "engines": {
-        "node": "22.x"
+        "node": "14.x"
     },
     "scripts": {
         "start": "node index.js",
