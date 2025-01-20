@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Ruta principal
 app.get('/', (req, res) => {
-    res.send('¡Bienvenido a la API!');
+    res.send('¡Bienvenido a la API calculo de endeudamiento!');
 });
 
 
