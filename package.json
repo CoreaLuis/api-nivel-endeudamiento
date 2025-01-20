@@ -7,17 +7,18 @@
         "node": "14.x"
     },
     "scripts": {
-        "start": "node app.js",
-        "dev": "nodemon app.js",
+        "start": "node index.js",
+        "dev": "nodemon index.js",
         "build": "vercel build",
         "deploy": "vercel --prod",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-    "author": "",
+    "author": "Ing Luis Corea",
     "license": "ISC",
     "dependencies": {
-        "vercel": "^39.3.0"
+        "vercel": "^39.3.0",
+        "express": "^4.21.2"
     },
     "devDependencies": {
         "express": "^4.21.2",

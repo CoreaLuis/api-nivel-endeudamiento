@@ -7,6 +7,12 @@ const PORT = 3000;
 // Middleware para manejar JSON
 app.use(express.json());
 
+// Ruta principal
+app.get('/', (req, res) => {
+    res.send('¡Bienvenido a la API!');
+});
+
+
 // Ruta para calcular los gastos y margen disponible
 app.post('/api/calcular-endeudamiento', (req, res) => {
     const {
@@ -65,5 +71,5 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+    console.log(`🚀 Server ready at: http://localhost:${PORT}`);
 });
