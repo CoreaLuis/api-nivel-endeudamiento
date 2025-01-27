@@ -6,7 +6,7 @@ const PORT = 3000;
 
 // Ruta principal
 app.get('/', (req, res) => {
-    res.send('¡Bienvenido a la API calculo de endeudamiento!');
+    res.send('¡Bienvenido a la API de cálculo de endeudamiento!');
 });
 
 // Middleware para manejar JSON
@@ -19,56 +19,43 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
         gastosBasicos,
         gastoPrestamo,
         gastoCombustible,
-        gastoSeguro,
-        gastoMantenimiento
+        gastoSeguro = 0, // Asigna 0 si no viene en la solicitud
+        gastoMantenimiento = 0 // Asigna 0 si no viene en la solicitud
     } = req.body;
 
-    // Validar que todos los valores sean números y no nulos
-    if (
-        ingresosMensuales == null ||
-        gastosBasicos == null ||
-        gastoPrestamo == null ||
-        gastoCombustible == null ||
-        gastoSeguro == null ||
-        gastoMantenimiento == null
-    ) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios y deben ser números.' });
-    }
+    // Asegurar que todos los valores sean números válidos o asignar 0 si están vacíos
+    const ingresos = parseFloat(ingresosMensuales) || 0;
+    const basicos = parseFloat(gastosBasicos) || 0;
+    const prestamo = parseFloat(gastoPrestamo) || 0;
+    const combustible = parseFloat(gastoCombustible) || 0;
+    const seguro = parseFloat(gastoSeguro) || 0;
+    const mantenimiento = parseFloat(gastoMantenimiento) || 0;
 
-    // Asegurar que todos los valores sean números
-    const ingresos = parseFloat(ingresosMensuales);
-    const basicos = parseFloat(gastosBasicos);
-    const prestamo = parseFloat(gastoPrestamo);
-    const combustible = parseFloat(gastoCombustible);
-    const seguro = parseFloat(gastoSeguro);
-    const mantenimiento = parseFloat(gastoMantenimiento);
-
-    if (isNaN(ingresos) || isNaN(basicos) || isNaN(prestamo) || isNaN(combustible) || isNaN(seguro) || isNaN(mantenimiento)) {
-        return res.status(400).json({ error: 'Todos los valores deben ser números válidos.' });
+    // Validar que ingresos sean mayor que 0
+    if (ingresos <= 0) {
+        return res.status(400).json({ error: 'Los ingresos mensuales deben ser un número mayor que 0.' });
     }
 
     const totalGastos = basicos + prestamo + combustible + seguro + mantenimiento;
     const porcentajeGastos = (totalGastos / ingresos) * 100;
     const margenDisponible = ingresos - totalGastos;
-    // Verificar si está entre el 20% y el 30%
     const entreVeinteYTreintaPorCiento = porcentajeGastos >= 20 && porcentajeGastos <= 30;
-    const thirthyPercent = (ingresos - totalGastos) * 0.3
-    const nivelEndudamiento = (totalGastos / ingresos) * 100
-        // Response
+    const treintaPorCientoIngresos = ingresos * 0.3;
+    const nivelEndeudamiento = porcentajeGastos.toFixed(2);
+
     return res.json({
         ingresosMensuales: ingresos,
         totalGastos,
         margenDisponible,
-        porcentajeGastos: porcentajeGastos.toFixed(2), // Redondear a 2 decimales
+        porcentajeGastos: nivelEndeudamiento,
         entreVeinteYTreintaPorCiento,
-        thirthyPercent,
-        nivelEndudamiento,
+        treintaPorCientoIngresos,
+        nivelEndeudamiento,
         mensaje: entreVeinteYTreintaPorCiento ?
-            `Los gastos representan el ${porcentajeGastos.toFixed(2)}% de los ingresos, lo cual está entre el 20% y el 30%.` : `Los gastos representan el ${porcentajeGastos.toFixed(2)}% de los ingresos, lo cual está fuera del rango del 20% al 30%.`
+            `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está dentro del 20% al 30%.` :
+            `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está fuera del rango del 20% al 30%.`
     });
 });
-
-
 
 // Iniciar el servidor
 app.listen(PORT, () => {
