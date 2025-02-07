@@ -36,7 +36,8 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
         return res.status(400).json({ error: 'Los ingresos mensuales deben ser un número mayor que 0.' });
     }
 
-    const totalGastos = basicos + prestamo + combustible + seguro + mantenimiento;
+    // const totalGastos = basicos + prestamo + combustible + seguro + mantenimiento;
+    const totalGastos = basicos + combustible + seguro + mantenimiento;
     const porcentajeGastos = (totalGastos / ingresos) * 100;
     const margenDisponible = (ingresos - totalGastos).toFixed(2);
     const entreVeinteYTreintaPorCiento = porcentajeGastos >= 20 && porcentajeGastos <= 30;
