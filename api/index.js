@@ -17,7 +17,7 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
     const {
         ingresosMensuales,
         gastosBasicos,
-        gastoPrestamo,
+        gastoPrestamo = 0,
         gastoCombustible,
         gastoSeguro = 0, // Asigna 0 si no viene en la solicitud
         gastoMantenimiento = 0 // Asigna 0 si no viene en la solicitud
@@ -52,8 +52,7 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
         treintaPorCientoIngresos,
         nivelEndeudamiento,
         mensaje: entreVeinteYTreintaPorCiento ?
-            `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está dentro del 20% al 30%.` :
-            `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está fuera del rango del 20% al 30%.`
+            `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está dentro del 20% al 30%.` : `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está fuera del rango del 20% al 30%.`
     });
 });
 
