@@ -38,7 +38,7 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
 
     const totalGastos = basicos + prestamo + combustible + seguro + mantenimiento;
     const porcentajeGastos = (totalGastos / ingresos) * 100;
-    const margenDisponible = ingresos - totalGastos;
+    const margenDisponible = (ingresos - totalGastos).toFixed(2);
     const entreVeinteYTreintaPorCiento = porcentajeGastos >= 20 && porcentajeGastos <= 30;
     const treintaPorCientoIngresos = ingresos * 0.3;
     const nivelEndeudamiento = porcentajeGastos.toFixed(2);
