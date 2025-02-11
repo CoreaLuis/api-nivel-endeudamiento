@@ -44,6 +44,17 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
     const treintaPorCientoIngresos = ingresos * 0.3;
     const nivelEndeudamiento = porcentajeGastos.toFixed(2);
 
+    let estadoEndeudamiento = '';
+
+    if (porcentajeGastos < 20) {
+        estadoEndeudamiento = "Bajo";
+    } else if (porcentajeGastos >= 20 && porcentajeGastos <= 30) {
+        estadoEndeudamiento = "Moderado";
+    } else {
+        estadoEndeudamiento = "Alto";
+    }
+    console.log(estadoEndeudamiento);
+
     return res.json({
         ingresosMensuales: ingresos,
         totalGastos,
@@ -52,6 +63,7 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
         entreVeinteYTreintaPorCiento,
         treintaPorCientoIngresos,
         nivelEndeudamiento,
+        estadoEndeudamiento,
         mensaje: entreVeinteYTreintaPorCiento ?
             `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está dentro del 20% al 30%.` : `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está fuera del rango del 20% al 30%.`
     });
