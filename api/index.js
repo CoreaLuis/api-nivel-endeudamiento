@@ -36,14 +36,23 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
         return res.status(400).json({ error: 'Los ingresos mensuales deben ser un número mayor que 0.' });
     }
 
-    // const totalGastos = basicos + prestamo + combustible + seguro + mantenimiento;
-    const totalGastos = basicos + combustible + seguro + mantenimiento;
+
+    const totalGastos = basicos + prestamo + combustible + seguro + mantenimiento;
     const porcentajeGastos = (totalGastos / ingresos) * 100;
     const margenDisponible = (ingresos - totalGastos).toFixed(2);
     const percentMargenDisponible = ((margenDisponible / ingresos) * 100).toFixed(2);
     const entreVeinteYTreintaPorCiento = porcentajeGastos >= 20 && porcentajeGastos <= 30;
     const treintaPorCientoIngresos = ingresos * 0.3;
     const nivelEndeudamiento = porcentajeGastos.toFixed(2);
+
+    //NIVEL DE ENDEUDAMIENTO CON PRÉSTAMO
+    const totalGastosNew = basicos + prestamo + combustible + seguro + mantenimiento;
+    const porcentajeGastosNew = (totalGastosNew / ingresos) * 100;
+    const margenDisponibleNew = (ingresos - totalGastosNew).toFixed(2);
+    const percentMargenDisponibleNew = ((margenDisponibleNew / ingresos) * 100).toFixed(2);
+    const entreVeinteYTreintaPorCientoNew = porcentajeGastosNew >= 20 && porcentajeGastosNew <= 30;
+    const treintaPorCientoIngresosNew = ingresos * 0.3;
+    const nivelEndeudamientoNew = porcentajeGastosNew.toFixed(2);
 
     let estadoEndeudamiento = '';
 
@@ -67,7 +76,8 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
         nivelEndeudamiento,
         estadoEndeudamiento,
         mensaje: entreVeinteYTreintaPorCiento ?
-            `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está dentro del 20% al 30%.` : `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está fuera del rango del 20% al 30%.`
+            `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está dentro del 20% al 30%.` : `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está fuera del rango del 20% al 30%.`,
+        mensajeNew: 'NIVEL DE ENDEUDAMIENTO CON PRÉSTAMO VEHÍCULO'
     });
 });
 
