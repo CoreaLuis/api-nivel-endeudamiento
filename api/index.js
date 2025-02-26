@@ -52,6 +52,7 @@ function calcularSalarioNeto(salarioBruto) {
 app.get('/api/calcularsalario', (req, res) => {
     let salarioBruto = parseFloat(req.query.salario);
     let moneda = req.query.moneda;
+    const tasaCambio = 36.6243;
     // Validamos que el salario sea un número válido
     if (isNaN(salarioBruto) || salarioBruto <= 0) {
         return res.status(400).json({ error: "Debe proporcionar un salario válido en la query, ejemplo: ?salario=18000&moneda=USD" });
@@ -62,10 +63,11 @@ app.get('/api/calcularsalario', (req, res) => {
     }
     // Si la moneda es USD, convertimos el salario a córdobas
     if (moneda === "USD") {
-        salarioBruto *= 36; // Conversión a NIO
+        salarioBruto *= tasaCambio; // Conversión a NIO
     }
     let resultado = calcularSalarioNeto(salarioBruto);
     // Agregamos la moneda al resultado
+    resultado.tasaCambio = tasaCambio;
     resultado.moneda = moneda;
     res.json(resultado);
 });
