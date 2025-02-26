@@ -48,18 +48,27 @@ function calcularSalarioNeto(salarioBruto) {
 }
 
 
+// Ruta para calcular el salario neto con la moneda
 app.get('/api/calcularsalario', (req, res) => {
     let salarioBruto = parseFloat(req.query.salario);
-
+    let moneda = req.query.moneda;
     // Validamos que el salario sea un número válido
     if (isNaN(salarioBruto) || salarioBruto <= 0) {
-        return res.status(400).json({ error: "Debe proporcionar un salario válido en la query, ejemplo: ?salario=18000" });
+        return res.status(400).json({ error: "Debe proporcionar un salario válido en la query, ejemplo: ?salario=18000&moneda=USD" });
     }
-
+    // Validamos que la moneda venga en la petición y sea válida
+    if (!moneda || (moneda !== "USD" && moneda !== "NIO")) {
+        return res.status(400).json({ error: "Debe proporcionar una moneda válida (USD o NIO), ejemplo: ?salario=18000&moneda=USD" });
+    }
+    // Si la moneda es USD, convertimos el salario a córdobas
+    if (moneda === "USD") {
+        salarioBruto *= 36; // Conversión a NIO
+    }
     let resultado = calcularSalarioNeto(salarioBruto);
+    // Agregamos la moneda al resultado
+    resultado.moneda = moneda;
     res.json(resultado);
 });
-
 
 // Middleware para manejar JSON
 app.use(express.json());

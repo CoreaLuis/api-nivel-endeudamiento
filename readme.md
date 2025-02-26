@@ -18,9 +18,10 @@ Esta API fue desarrollada con el fin de hacer cálculos para que el cliente vea 
 
 #### Endpoint
 - http://localhost:3000/api/calcular-endeudamiento (POST)
-- http://localhost:3000/api/calcularsalario?salario=18000  (GET)
+- http://localhost:3000/api/calcularsalario?salario=18000&moneda=NIO  (GET)
 
 Estos datos solo se haran uso en formulario no se alojan en ninguna parte.
+El cálculo basándonos en el salario verifica si es dólares o córdobas
 
 > Desarrollo e Innovación LAFISE
 
@@ -58,7 +59,7 @@ NODE_ENV=production node app
 
 Este desarrollo fue creado con el fin de aportar un poco al customer service 🤵‍♂️ y generar en el cliente un valor agregado al adquirir su crédito ✅. 
 
-### JSON - Payload Entrada
+### JSON - Payload Entrada Nivel Endeudamiento
 Todos estos campos tienen que ser númericos ya que si no lanza error
 {
     "ingresosMensuales": 25000,
@@ -88,6 +89,35 @@ Si contiene sting o valores que no sean numéricos
 Si hacen falta campos
 {
     "error": "Todos los campos son obligatorios y deben ser números."
+}
+
+
+
+### JSON - Payload Response Cálculo Salario Neto 
+### Response 200 OK NIO ✅
+/api/calcularsalario?salario=18000&moneda=NIO
+{
+  "salarioBruto": "18000.00",
+  "inssLaboral": "1260.00",
+  "salarioNetoGravable": "16740.00",
+  "irMensual": "1264.67",
+  "salarioNeto": "15475.33",
+  "moneda": "NIO"
+}
+### Response 200 OK USD ✅
+/api/calcularsalario?salario=500&moneda=USD
+{
+    "salarioBruto": "18000.00",
+    "inssLaboral": "1260.00",
+    "salarioNetoGravable": "16740.00",
+    "irMensual": "1264.67",
+    "salarioNeto": "15475.33",
+    "moneda": "USD"
+}
+
+### Response 400 ERROR 🚩
+{
+    "error": "Debe proporcionar una moneda válida (USD o NIO), ejemplo: ?salario=18000&moneda=USD"
 }
 
 ## License 📚
