@@ -9,6 +9,58 @@ app.get('/', (req, res) => {
     res.send('¡Bienvenido a la API de cálculo de endeudamiento!');
 });
 
+// Función para calcular el salario neto
+function calcularSalarioNeto(salarioBruto) {
+    const tasaINSS = 0.07; // 7% de INSS laboral
+    const tramosIR = [
+        { min: 0, max: 100000, tasa: 0, fijo: 0 },
+        { min: 100000.01, max: 200000, tasa: 0.15, fijo: 0 },
+        { min: 200000.01, max: 350000, tasa: 0.20, fijo: 15000 },
+        { min: 350000.01, max: 500000, tasa: 0.25, fijo: 45000 },
+        { min: 500000.01, max: Infinity, tasa: 0.30, fijo: 82500 }
+    ];
+
+    // Cálculo del INSS Laboral
+    let inssLaboral = salarioBruto * tasaINSS;
+    // Cálculo del salario neto gravable
+    let salarioNetoGravable = salarioBruto - inssLaboral;
+    // Convertimos el salario gravable a base anual
+    let salarioAnual = salarioNetoGravable * 12;
+    // Cálculo del IR según la tabla
+    let irAnual = 0;
+    for (let tramo of tramosIR) {
+        if (salarioAnual > tramo.min) {
+            let exceso = Math.min(salarioAnual, tramo.max) - tramo.min;
+            irAnual = (exceso * tramo.tasa) + tramo.fijo;
+        }
+    }
+    // IR mensual
+    let irMensual = irAnual / 12;
+    // Cálculo del salario neto final
+    let salarioNeto = salarioBruto - inssLaboral - irMensual;
+    return {
+        salarioBruto: salarioBruto.toFixed(2),
+        inssLaboral: inssLaboral.toFixed(2),
+        salarioNetoGravable: salarioNetoGravable.toFixed(2),
+        irMensual: irMensual.toFixed(2),
+        salarioNeto: salarioNeto.toFixed(2)
+    };
+}
+
+
+app.get('/api/calcularsalario', (req, res) => {
+    let salarioBruto = parseFloat(req.query.salario);
+
+    // Validamos que el salario sea un número válido
+    if (isNaN(salarioBruto) || salarioBruto <= 0) {
+        return res.status(400).json({ error: "Debe proporcionar un salario válido en la query, ejemplo: ?salario=18000" });
+    }
+
+    let resultado = calcularSalarioNeto(salarioBruto);
+    res.json(resultado);
+});
+
+
 // Middleware para manejar JSON
 app.use(express.json());
 
@@ -35,7 +87,7 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
     if (ingresos <= 0) {
         return res.status(400).json({ error: 'Los ingresos mensuales deben ser un número mayor que 0.' });
     }
-
+    const tasaCambio = 36.6243;
     const basicosSinprestamo = basicos + prestamo + combustible + seguro + mantenimiento;
     const totalGastosFix = (basicos + prestamo + combustible + seguro + mantenimiento).toFixed(2);
     const totalGastos = basicos + prestamo + combustible + seguro + mantenimiento;
@@ -79,7 +131,6 @@ app.post('/api/calcular-endeudamiento', (req, res) => {
         estadoEndeudamiento,
         mensaje: entreVeinteYTreintaPorCiento ?
             `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está dentro del 20% al 30%.` : `Los gastos representan el ${nivelEndeudamiento}% de los ingresos, lo cual está fuera del rango del 20% al 30%.`,
-        mensajeNew: 'NIVEL DE ENDEUDAMIENTO CON PRÉSTAMO VEHÍCULO'
     });
 });
 

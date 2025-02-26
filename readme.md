@@ -5,7 +5,7 @@
 
 [![N|Solid](https://cdn.lafise.com/resources/images/Email/Images/IMG_Logo_Banco_LAFISE_E_%402x.png)](https://apidocs.lafise.com)
 
-Esta API fue desarrollada con el fin de hacer cálculos para que el cliente vea si es capaz sanamente de costear un crédito.
+Esta API fue desarrollada con el fin de hacer cálculos para que el cliente vea si es capaz sanamente de costear un crédito y calcular salario neto.
 
 - Lenguaje JS
 - Express JS
@@ -17,7 +17,8 @@ Esta API fue desarrollada con el fin de hacer cálculos para que el cliente vea 
 - Ingresar Datos Aproximados de sus ingresos
 
 #### Endpoint
-- http://localhost:3000/api/calcular
+- http://localhost:3000/api/calcular-endeudamiento (POST)
+- http://localhost:3000/api/calcularsalario?salario=18000  (GET)
 
 Estos datos solo se haran uso en formulario no se alojan en ninguna parte.
 
